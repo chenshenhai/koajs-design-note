@@ -1,4 +1,4 @@
-const send = require('./src/send');
+const send = require('./index');
 const Koa = require('koa');
 const app = new Koa();
 

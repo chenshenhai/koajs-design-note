@@ -2,10 +2,10 @@
   "name": "001",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "./node_modules/.bin/nodemon src/index.js",
+    "start": "node example.js",
+    "dev": "./node_modules/.bin/nodemon example.js",
     "fix": "./node_modules/.bin/eslint --fix --ext .js ./",
     "precommit": "./node_modules/.bin/eslint --ext .jsx,.js ./",
     "prepush": "./node_modules/.bin/eslint --ext .jsx,.js ./"
