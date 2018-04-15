@@ -19,10 +19,9 @@ const defaultOpts = {
   setHeaders: () => {}
 };
 
-async function send(ctx, filePath, opts = defaultOpts) {
-  const {
-    root
-  } = opts;
+async function send(ctx, urlPath, opts = defaultOpts) {
+  const { root } = opts;
+  let filePath = path.join(root, urlPath);
 
   // step 01: normalize path
   try {
@@ -30,15 +29,29 @@ async function send(ctx, filePath, opts = defaultOpts) {
   } catch (err) {
     ctx.throw(400, 'failed to decode');
   }
-  filePath = path.join(root, filePath);
 
   // TODO: step 02: check hidden file support
 
   // TODO: step 03: check ext
 
-  // step 04: stat
-  let stat = fs.statSync(filePath);
-  console.log('xxxx', extname(filePath));
+  // step 04: stat and exist
+  try {
+    let exists = fs.existsSync(filePath);
+    if (exists !== true) {
+      ctx.body = '404 Not Found';
+      return;
+    }
+
+    let stats = fs.statSync(filePath);
+    if (stats.isDirectory()) {
+      ctx.body = `${urlPath}/`;
+      return;
+    }
+  } catch (err) {
+    err.status = 500;
+    throw err;
+  }
+
   // TODO: step 05 check zip
 
   // step 06: stream
