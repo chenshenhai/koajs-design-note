@@ -10,18 +10,18 @@ const {
 
 const defaultOpts = {
   root: '',
-  maxage: '',
+  maxage: 0,
   immutable: false,
   hidden: false,
-  extensions: false,
   brotli: false,
   gzip: false,
   setHeaders: () => {}
 };
 
 async function send(ctx, urlPath, opts = defaultOpts) {
-  const { root } = opts;
+  const { root, hidden, immutable, maxage, setHeaders } = opts;
   let filePath = path.join(root, urlPath);
+  const fileBasename = basename(filePath);
 
   // step 01: normalize path
   try {
@@ -30,19 +30,25 @@ async function send(ctx, urlPath, opts = defaultOpts) {
     ctx.throw(400, 'failed to decode');
   }
 
-  // TODO: step 02: check hidden file support
+  // step 02: check hidden file support
+  if (hidden !== true && fileBasename.startsWith('.')) {
+    ctx.throw(404, '404 Not Found');
+    return;
+  }
 
   // TODO: step 03: check ext
 
   // step 04: stat and exist
+  let stats;
+  let exists;
   try {
-    let exists = fs.existsSync(filePath);
+    exists = fs.existsSync(filePath);
     if (exists !== true) {
       ctx.body = '404 Not Found';
       return;
     }
 
-    let stats = fs.statSync(filePath);
+    stats = fs.statSync(filePath);
     if (stats.isDirectory()) {
       ctx.body = `${urlPath}/`;
       return;
@@ -53,9 +59,27 @@ async function send(ctx, urlPath, opts = defaultOpts) {
   }
 
   // TODO: step 05 check zip
+  // TODO
 
-  // step 06: stream
+  // step 06 setHeaders
+  if (setHeaders) {
+    setHeaders(ctx.res, filePath, stats);
+  }
+
+  ctx.set('Content-Length', stats.size);
+  if (!ctx.response.get('Last-Modified')) {
+    ctx.set('Last-Modified', stats.mtime.toUTCString());
+  }
+  if (!ctx.response.get('Cache-Control')) {
+    const directives = ['max-age=' + (maxage / 1000 | 0)];
+    if (immutable) {
+      directives.push('immutable');
+    }
+    ctx.set('Cache-Control', directives.join(','));
+  }
   ctx.type = extname(filePath);
+
+  // step 07 stream
   ctx.body = fs.createReadStream(filePath);
 }
 
