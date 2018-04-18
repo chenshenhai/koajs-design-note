@@ -40,22 +40,21 @@ async function send(ctx, urlPath, opts = defaultOpts) {
     return;
   }
 
-  // step 03: stat and exist
-  let stats;
-  let exists;
-  try {
-    exists = fs.existsSync(filePath);
-    if (exists !== true) {
-      ctx.throw(404, '404 Not Found');
-    }
-
+  // step 03: stat
+  let stats; 
+  try { 
     stats = fs.statSync(filePath);
     if (stats.isDirectory()) {
       ctx.throw(404, '404 Not Found');
     }
   } catch (err) {
-    err.status = 500;
-    throw err;
+    const notfound = ['ENOENT', 'ENAMETOOLONG', 'ENOTDIR']
+    if (notfound.includes(err.code)) {
+      ctx.throw(404, '404 Not Found');
+      return;
+    }
+    err.status = 500
+    throw err
   }
 
   let encodingExt = '';

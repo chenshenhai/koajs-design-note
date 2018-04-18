@@ -1,12 +1,16 @@
-const send = require('./index');
+const path = require('path');
 const Koa = require('koa');
+const statics = require('./index');
+
 const app = new Koa();
 
-// $ GET /package.json
-// $ GET /
+const root = path.join(__dirname, './public');
+app.use(statics({ root }));
 
-app.use(async ctx => {
-  await send(ctx, ctx.path, { root: `${__dirname}/public` });
+app.use(async(ctx, next) => {
+  if (ctx.path === '/hello') {
+    ctx.body = 'hello world';
+  }
 });
 
 app.listen(3000);
