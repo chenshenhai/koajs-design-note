@@ -12,6 +12,7 @@ const defaultOpts = {
   root: '',
   maxage: 0,
   immutable: false,
+  extensions: false,
   hidden: false,
   brotli: false,
   gzip: false,
@@ -20,15 +21,21 @@ const defaultOpts = {
 
 async function send(ctx, urlPath, opts = defaultOpts) {
   const { root, hidden, immutable, maxage, setHeaders } = opts;
-  let filePath = path.join(root, urlPath);
-  const fileBasename = basename(filePath);
+  let filePath = urlPath;
 
   // step 01: normalize path
   try {
     filePath = decodeURIComponent(filePath);
+    // check legal path
+    if (/[\.]{2,}/ig.test(filePath)) {
+      ctx.throw(403, 'Forbidden');
+    }
   } catch (err) {
     ctx.throw(400, 'failed to decode');
   }
+
+  filePath = path.join(root, urlPath);
+  const fileBasename = basename(filePath);
 
   // step 02: check hidden file support
   if (hidden !== true && fileBasename.startsWith('.')) {
@@ -36,7 +43,21 @@ async function send(ctx, urlPath, opts = defaultOpts) {
     return;
   }
 
-  // TODO: step 03: check ext
+  // step 03: check ext
+  // if (extensions && !/\.[^/]*$/.exec(path)) {
+  //   const list = [].concat(extensions)
+  //   for (let i = 0; i < list.length; i++) {
+  //     let ext = list[i]
+  //     if (typeof ext !== 'string') {
+  //       throw new TypeError('option extensions must be array of strings or false')
+  //     }
+  //     if (!/^\./.exec(ext)) ext = '.' + ext
+  //     if (fs.existsSync(path + ext)) {
+  //       path = path + ext
+  //       break;
+  //     }
+  //   }
+  // }
 
   // step 04: stat and exist
   let stats;
@@ -44,14 +65,12 @@ async function send(ctx, urlPath, opts = defaultOpts) {
   try {
     exists = fs.existsSync(filePath);
     if (exists !== true) {
-      ctx.body = '404 Not Found';
-      return;
+      ctx.throw(404, '404 Not Found');
     }
 
     stats = fs.statSync(filePath);
     if (stats.isDirectory()) {
-      ctx.body = `${urlPath}/`;
-      return;
+      ctx.throw(404, '404 Not Found');
     }
   } catch (err) {
     err.status = 500;

@@ -4,7 +4,6 @@
     "ecmaVersion": 2017
   },
   "rules": {
-    "no-unused-vars": 1,
-    "no-useless-escape": 0
+    "no-unused-vars": 1
   }
 }
