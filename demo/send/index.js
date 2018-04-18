@@ -1,11 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const {
-  normalize,
   basename,
-  extname,
-  resolve,
-  sep
+  extname
 } = path;
 
 const defaultOpts = {
@@ -20,7 +17,7 @@ const defaultOpts = {
 };
 
 async function send(ctx, urlPath, opts = defaultOpts) {
-  const { root, hidden, immutable, maxage, setHeaders } = opts;
+  const { root, hidden, immutable, maxage, brotli, gzip, setHeaders } = opts;
   let filePath = urlPath;
 
   // step 01: normalize path
@@ -43,23 +40,7 @@ async function send(ctx, urlPath, opts = defaultOpts) {
     return;
   }
 
-  // step 03: check ext
-  // if (extensions && !/\.[^/]*$/.exec(path)) {
-  //   const list = [].concat(extensions)
-  //   for (let i = 0; i < list.length; i++) {
-  //     let ext = list[i]
-  //     if (typeof ext !== 'string') {
-  //       throw new TypeError('option extensions must be array of strings or false')
-  //     }
-  //     if (!/^\./.exec(ext)) ext = '.' + ext
-  //     if (fs.existsSync(path + ext)) {
-  //       path = path + ext
-  //       break;
-  //     }
-  //   }
-  // }
-
-  // step 04: stat and exist
+  // step 03: stat and exist
   let stats;
   let exists;
   try {
@@ -77,11 +58,22 @@ async function send(ctx, urlPath, opts = defaultOpts) {
     throw err;
   }
 
-  // TODO: step 05 check zip
-  // TODO
+  let encodingExt = '';
+  // step 04 check zip
+  if (ctx.acceptsEncodings('br', 'identity') === 'br' && brotli && (fs.existsSync(filePath + '.br'))) {
+    filePath = filePath + '.br';
+    ctx.set('Content-Encoding', 'br');
+    ctx.res.removeHeader('Content-Length');
+    encodingExt = '.br';
+  } else if (ctx.acceptsEncodings('gzip', 'identity') === 'gzip' && gzip && (fs.existsSync(filePath + '.gz'))) {
+    filePath = filePath + '.gz';
+    ctx.set('Content-Encoding', 'gzip');
+    ctx.res.removeHeader('Content-Length');
+    encodingExt = '.gz';
+  }
 
-  // step 06 setHeaders
-  if (setHeaders) {
+  // step 05 setHeaders
+  if (typeof setHeaders === 'function') {
     setHeaders(ctx.res, filePath, stats);
   }
 
@@ -96,9 +88,11 @@ async function send(ctx, urlPath, opts = defaultOpts) {
     }
     ctx.set('Cache-Control', directives.join(','));
   }
-  ctx.type = extname(filePath);
 
-  // step 07 stream
+  const ctxType = encodingExt !== '' ? extname(basename(filePath, encodingExt)) : extname(filePath);
+  ctx.type = ctxType;
+
+  // step 06 stream
   ctx.body = fs.createReadStream(filePath);
 }
 
