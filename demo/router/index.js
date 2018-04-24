@@ -1,4 +1,3 @@
-const compose = require('../compose');
 const methods = [
   'GET',
   'PUT',
@@ -19,8 +18,6 @@ class Layer {
 class Router {
   constructor(opts = {}) {
     this.stack = [];
-
-    let that = this;
   }
 
   register(path, methods, middleware, opts) {
@@ -30,8 +27,24 @@ class Router {
   }
 
   routes() {
-    console.log(this.stack);
+    let stock = this.stack;
     return async function(ctx, next) {
+      let currentPath = ctx.path;
+      let route;
+
+      for (let i = 0; i < stock.length; i++) {
+        let item = stock[i];
+        if (currentPath === item.path) {
+          route = item.middleware;
+          break;
+        }
+      }
+
+      if (typeof route === 'function') {
+        route(ctx, next);
+        return;
+      }
+
       await next();
     };
   }

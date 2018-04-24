@@ -12,7 +12,7 @@ router.get('/item', async ctx => { ctx.body = 'item page'; });
 app.use(router.routes());
 
 app.use(async ctx => {
-  ctx.body = 'hello world!';
+  ctx.body = '404';
 });
 
 app.listen(3000);
