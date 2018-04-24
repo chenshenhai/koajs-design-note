@@ -27,6 +27,7 @@ class Router {
   }
 
   routes() {
+
     let stock = this.stack;
     return async function(ctx, next) {
       let currentPath = ctx.path;
@@ -34,7 +35,7 @@ class Router {
 
       for (let i = 0; i < stock.length; i++) {
         let item = stock[i];
-        if (currentPath === item.path) {
+        if (currentPath === item.path && item.methods.indexOf(ctx.method) >= 0) {
           route = item.middleware;
           break;
         }
