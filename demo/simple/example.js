@@ -4,15 +4,7 @@ const app = new SimpleKoa();
 const PORT = 3001;
 
 app.use(ctx => {
-  ctx.res.write('<p>line 1</p>');
-});
-
-app.use(ctx => {
-  ctx.res.write('<p>line 2</p>');
-});
-
-app.use(ctx => {
-  ctx.res.write('<p>line 3</p>');
+  ctx.body = '<p>this is a body</p>';
 });
 
 app.listen(PORT, () => {

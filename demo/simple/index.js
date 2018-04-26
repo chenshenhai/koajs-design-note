@@ -1,11 +1,24 @@
 const http = require('http');
 const Emitter = require('events');
 
+const context = {
+  _body: null,
+
+  get body() {
+    return this._body;
+  },
+
+  set body(val) {
+    this._body = val;
+    this.res.end(val);
+  }
+};
+
 class SimpleKoa extends Emitter {
   constructor() {
     super();
     this.middleware = [];
-    this.context = Object.create({});
+    this.context = Object.create(context);
   }
 
   listen(...args) {
@@ -33,12 +46,6 @@ class SimpleKoa extends Emitter {
           cb(context);
         } catch (err) {
           that.onerror(err);
-        }
-
-        if (idx + 1 >= this.middleware.length) {
-          if (res && typeof res.end === 'function') {
-            res.end();
-          }
         }
       });
     };
