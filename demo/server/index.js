@@ -8,17 +8,28 @@ class WebServer extends Emitter {
     this.context = Object.create({});
   }
 
+  /**
+   * 服务事件监听
+   * @param {*} args
+   */
   listen(...args) {
     const server = http.createServer(this.callback());
     return server.listen(...args);
   }
 
+  /**
+   * 注册使用中间件
+   * @param {Function} fn
+   */
   use(fn) {
     if (typeof fn === 'function') {
       this.middleware.push(fn);
     }
   }
 
+  /**
+   * 中间件总回调方法
+   */
   callback() {
     let that = this;
 
@@ -45,10 +56,19 @@ class WebServer extends Emitter {
     return handleRequest;
   }
 
+  /**
+   * 异常处理监听
+   * @param {EndOfStreamError} err
+   */
   onerror(err) {
     console.log(err);
   }
 
+  /**
+   * 创建通用上下文
+   * @param {Object} req
+   * @param {Object} res
+   */
   createContext(req, res) {
     let context = Object.create(this.context);
     context.req = req;
