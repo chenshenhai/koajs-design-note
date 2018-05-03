@@ -3,7 +3,7 @@ const SimpleKoa = require('./index');
 const app = new SimpleKoa();
 const PORT = 3001;
 
-app.use(ctx => {
+app.use(async ctx => {
   ctx.body = '<p>this is a body</p>';
 });
 
