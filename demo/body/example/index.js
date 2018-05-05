@@ -25,5 +25,5 @@ app.use(async(ctx, next) => {
 });
 
 app.listen(3000, () => {
-  console.log('[demo] request post is starting at port 3000');
+  console.log('[demo] is starting at port 3000');
 });
