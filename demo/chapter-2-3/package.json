@@ -1,10 +1,11 @@
 {
-  "name": "chapter-2-2",
+  "name": "chapter-2-3",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/nodemon example.js",
+    "start": "node index.js",
+    "dev": "./node_modules/.bin/nodemon index.js",
     "fix": "./node_modules/.bin/eslint --fix --ext .js ./",
     "precommit": "./node_modules/.bin/eslint --ext .jsx,.js ./",
     "prepush": "./node_modules/.bin/eslint --ext .jsx,.js ./"
