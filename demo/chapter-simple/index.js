@@ -1,6 +1,6 @@
 const http = require('http');
 const Emitter = require('events');
-const compose = require('./../compose');
+const compose = require('./compose');
 
 /**
  * 通用上下文
