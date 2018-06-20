@@ -1,15 +1,19 @@
 const mount = require('./index');
-const Koa = require('koa')
+const Koa = require('koa');
 
-async function app1 (ctx, next) {
+const app1 = new Koa();
+const app2 = new Koa();
+
+app1.use(async (ctx, next) => {
   await next()
   ctx.body = 'app 1'
-}
+})
 
-async function app2 (ctx, next) {
+
+app2.use(async (ctx, next) => {
   await next()
   ctx.body = 'app 2'
-}
+})
 
 const app = new Koa()
 
