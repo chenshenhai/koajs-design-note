@@ -14,5 +14,5 @@ app.use(async ctx => {
 });
 
 app.listen(3000, () => {
-  console.log('[demo] jsonp is starting at port 3000');
+  console.log('[demo] view is starting at port 3000');
 });
