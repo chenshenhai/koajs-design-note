@@ -44,20 +44,20 @@ async function send(ctx, urlPath, opts = defaultOpts) {
 
   // step 03: stat
   // 获取文件或者目录信息
-  let stats; 
-  try { 
+  let stats;
+  try {
     stats = fs.statSync(filePath);
     if (stats.isDirectory()) {
       ctx.throw(404, '404 Not Found');
     }
   } catch (err) {
-    const notfound = ['ENOENT', 'ENAMETOOLONG', 'ENOTDIR']
+    const notfound = ['ENOENT', 'ENAMETOOLONG', 'ENOTDIR'];
     if (notfound.includes(err.code)) {
       ctx.throw(404, '404 Not Found');
       return;
     }
-    err.status = 500
-    throw err
+    err.status = 500;
+    throw err;
   }
 
   let encodingExt = '';

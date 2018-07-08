@@ -6,8 +6,9 @@ function statics(opts = {
 }) {
   opts.root = resolve(opts.root);
 
-  // is need defer ?
+  // 是否需要等待其他请求
   if (opts.defer !== true) {
+    // 如果需要等待其他请求
     return async function statics(ctx, next) {
       let done = false;
 
@@ -27,6 +28,7 @@ function statics(opts = {
       }
     };
   } else {
+    // 如果不需要等待其他请求
     return async function statics(ctx, next) {
       await next();
 
