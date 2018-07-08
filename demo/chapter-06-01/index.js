@@ -26,7 +26,7 @@ function parseQueryStr(queryStr) {
 function bodyParser(opts = {}) {
   return async function(ctx, next) {
     if (!ctx.request.body && ctx.method === 'POST') {
-      let body = await readStream(ctx);
+      let body = await readStream(ctx.request.req);
       let result = body;
       if (ctx.request.is(formTypes)) {
         result = parseQueryStr(body);

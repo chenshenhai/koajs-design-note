@@ -52,7 +52,7 @@ function streamEventListen(req, callback) {
       return;
     }
     if (data) {
-      chunk.push(data);
+      chunk.push(data.toString());
     }
   }
 
@@ -67,8 +67,8 @@ function streamEventListen(req, callback) {
     }
 
     complete = true;
-    chunk = [];
     let result = chunk.join('');
+    chunk = [];
     callback(result, null);
   }
 }
