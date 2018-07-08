@@ -1,5 +1,5 @@
 const {resolve} = require('path');
-const send = require('./../send');
+const send = require('./send');
 
 function statics(opts = {
   root: ''
