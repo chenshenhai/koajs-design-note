@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node example.js",
+    "start": "node example/index.js",
     "dev": "./node_modules/.bin/nodemon example/index.js",
     "fix": "./node_modules/.bin/eslint --fix --ext .js ./",
     "precommit": "./node_modules/.bin/eslint --ext .jsx,.js ./",

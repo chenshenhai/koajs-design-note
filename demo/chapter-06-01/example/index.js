@@ -13,8 +13,6 @@ app.use(async(ctx, next) => {
     ctx.body = html;
   } else if (ctx.url === '/post' && ctx.method === 'POST') {
     // 当POST请求的时候，解析POST表单里的数据，并显示出来
-    // ctx.body = ctx.request.body;
-    console.log('ctx.request.is = ', ctx.request.is());
     ctx.body = ctx.request.body;
   } else {
     // 其他请求显示404
