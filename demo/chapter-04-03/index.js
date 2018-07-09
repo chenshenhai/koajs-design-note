@@ -1,15 +1,54 @@
-const logger = async function(ctx, next) {
-  let res = ctx.res;
+const {resolve} = require('path');
+const send = require('./send');
 
-  // 拦截操作请求 request
-  console.log(`<-- ${ctx.method} ${ctx.url}`);
+function statics(opts = {
+  root: ''
+}) {
+  opts.root = resolve(opts.root);
 
-  await next();
+  // 是否需要等待其他请求
+  if (opts.defer !== true) {
+    // 如果需要等待其他请求
+    return async function statics(ctx, next) {
+      let done = false;
 
-  // 拦截操作响应 request
-  res.on('finish', () => {
-    console.log(`--> ${ctx.method} ${ctx.url}`);
-  });
-};
+      if (ctx.method === 'HEAD' || ctx.method === 'GET') {
+        try {
+          await send(ctx, ctx.path, opts);
+          done = true;
+        } catch (err) {
+          if (err.status !== 404) {
+            throw err;
+          }
+        }
+      }
 
-module.exports = logger
+      if (!done) {
+        await next();
+      }
+    };
+  } else {
+    // 如果不需要等待其他请求
+    return async function statics(ctx, next) {
+      await next();
+
+      if (ctx.method !== 'HEAD' && ctx.method !== 'GET') {
+        return;
+      }
+
+      if (ctx.body != null || ctx.status !== 404) {
+        return;
+      }
+
+      try {
+        await send(ctx, ctx.path, opts);
+      } catch (err) {
+        if (err.status !== 404) {
+          throw err;
+        }
+      }
+    };
+  }
+}
+
+module.exports = statics;

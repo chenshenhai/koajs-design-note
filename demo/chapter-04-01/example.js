@@ -1,10 +1,13 @@
-const send = require('./index');
 const Koa = require('koa');
+const logger = require('./index');
 const app = new Koa();
 
-app.use(async ctx => {
-  await send(ctx, ctx.path, { root: `${__dirname}/public` });
+app.use(logger);
+
+app.use(async(ctx, next) => {
+  ctx.body = 'hello world';
 });
 
-app.listen(3000);
-console.log('listening on port 3000');
+app.listen(3000, () => {
+  console.log('[demo] is starting at port 3000');
+});
