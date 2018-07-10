@@ -27,7 +27,6 @@ class Router {
   }
 
   routes() {
-
     let stock = this.stack;
     return async function(ctx, next) {
       let currentPath = ctx.path;
