@@ -25,6 +25,7 @@ Koa.js 是一个极其精简的Web框架，只提供一下两种功能：
 ## 关于本书
 
 - [关于作者(我)](https://chenshenhai.github.io/)
+- [gitbook在线阅读入口](https://chenshenhai.github.io/koajs-design-note/)
 - 如有错误或疑问欢迎，提交[issues](https://github.com/chenshenhai/koajs-design-note/issues)或PR
 
 
