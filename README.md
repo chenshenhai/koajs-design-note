@@ -1,5 +1,21 @@
 # Koa.js 设计模式-学习笔记
 
+## 关于本书
+
+![koajs-design-note mini](https://user-images.githubusercontent.com/8216630/42525467-ceea9f42-84a5-11e8-9f3f-9ce358952a51.png)
+
+- [关于作者(我)](https://chenshenhai.github.io/)
+- [gitbook在线阅读入口](https://chenshenhai.github.io/koajs-design-note/)
+- 如有错误或疑问欢迎，提交[issues](https://github.com/chenshenhai/koajs-design-note/issues)或PR
+
+
+更多前端`技术学习`和`开源学习教程`可关注公众号 `DeepSeaCode`  (`大海码` ) 
+
+![qrcode_for_gh_959d1c4d729a_258](https://user-images.githubusercontent.com/8216630/43264303-495bf52c-9118-11e8-85cd-4ec6fcc6d066.jpg)
+
+<br/>
+
+
 ## 前言
 
 之前写过一本《Koa2进阶学习笔记》作为Koa的入门教程。很多知识点都是一笔带过，没有深入的讲解。这一本书是通过Koa.js的常用中间件实现原理，举一反三来讲解一些Node.js在Web开发过程中的原理和设计模式。
@@ -22,16 +38,8 @@ Koa.js 是一个极其精简的Web框架，只提供一下两种功能：
 框架的设计，这一因素比较复杂，后续会新开一本书讲解。本书主要是解析常用的Koa.js中间件，抽象出相关中间件的功能原理和实现方式，用demo让读者理解原理，减少对官方源码的依赖，尽量达到“授人予渔”。
 
 
-## 关于本书
-
-- [关于作者(我)](https://chenshenhai.github.io/)
-- [gitbook在线阅读入口](https://chenshenhai.github.io/koajs-design-note/)
-- 如有错误或疑问欢迎，提交[issues](https://github.com/chenshenhai/koajs-design-note/issues)或PR
-
 
 ## 目录
-
-![koajs-design-note mini](https://user-images.githubusercontent.com/8216630/42525467-ceea9f42-84a5-11e8-9f3f-9ce358952a51.png)
 
 
 * 1. Koa.js 原理
