@@ -4,8 +4,9 @@
 
 ![koajs-design-note mini](https://user-images.githubusercontent.com/8216630/42525467-ceea9f42-84a5-11e8-9f3f-9ce358952a51.png)
 
-- [关于作者(我)](https://chenshenhai.github.io/)
-- [gitbook在线阅读入口](https://chenshenhai.github.io/koajs-design-note/)
+- [关于作者(我)](https://chenshenhai.com/)
+- 个人博客阅读入口 [https://chenshenhai.com/koajs-design-note](https://chenshenhai.com/koajs-design-note);
+- Github Pages 阅读入口 [https://chenshenhai.github.io/koajs-design-note/](https://chenshenhai.github.io/koajs-design-note/)
 - 如有错误或疑问欢迎，提交[issues](https://github.com/chenshenhai/koajs-design-note/issues)或PR
 
 
